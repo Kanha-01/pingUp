@@ -14,7 +14,7 @@ export const sseController = (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://ping-up2-zeta.vercel.app');
 
   //deployment not working
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
