@@ -4,10 +4,12 @@ import { Outlet } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { dummyUserData } from '../assets/assets'
 import Loading from '../components/Loading'
+import { useSelector } from 'react-redux'
 
 const Layout = () => {
 
-    const user = dummyUserData 
+    //const user = dummyUserData    //instead this we can get our data from state , useSelector hook from react redux will be used for this purpose
+    const user = useSelector((state) => state.user.value)    // ?
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return user?(

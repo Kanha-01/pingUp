@@ -9,7 +9,7 @@ const UserProfile = ({ user, posts, profileId, setShowEdit }) => {
       <div className='flex flex-col md:flex-row items-start gap-6'>
 
         {/* profile_picture  */}
-        <div className='w-32 h-32 border-4 border-white shadow-lg absolute -top-16 rounded-full'>
+        <div className='w-32 h-32 border-4 border-white shadow-lg absolute -top-16 rounded-full overflow-hidden'>
           <img src={user.profile_picture} alt="" className='absolute rounded-full z-2' />
         </div>
 
