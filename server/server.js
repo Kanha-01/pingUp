@@ -15,7 +15,25 @@ const app = express();
 await connectDB();
 
 app.use(express.json());   //all requests will be passed using json method
-app.use(cors());              // bcakend to front end url connection
+
+const allowedOrigins = [
+  "http://localhost:5173",                // local dev
+  "https://ping-up2-zeta.vercel.app"      // deployed frontend
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+             // bcakend to front end url connection
 app.use(clerkMiddleware())     //will add auth property to every req when user is auhenticated
 
 app.get('/', (req,res)=> res.send('server is running'))

@@ -16,6 +16,9 @@ export const sseController = (req, res) => {
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('Access-Control-Allow-Origin', '*');
 
+  //deployment not working
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
   //add the client's response object to the connections object
   connections[userId] = res;
 
