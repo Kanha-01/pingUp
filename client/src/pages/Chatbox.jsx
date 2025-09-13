@@ -112,7 +112,7 @@ const Chatbox = () => {
       {/* send button etc */}
       <div className='px-4'>
         <div className='flex items-center gap-3 pl-5 p-1.5 bg-white w-full max-w-xl mx-auto border  border-gray-200 shadow rounded-full mb-5'>
-          <input type="text" className='flex-1 outline-none text-slate-700' placeholder='Type a message' onKeyDown={(e) => e.key === 'Enter' && sendMessage} onChange={(e) => setText(e.target.value)} value={text} />
+          <input type="text" className='flex-1 outline-none text-slate-700' placeholder='Type a message' onKeyDown={(e) => e.key === 'Enter' && sendMessage()} onChange={(e) => setText(e.target.value)} value={text} />
 
           <label htmlFor="image">
             {image ? <img src={URL.createObjectURL(image)} className='h-8 rounded' />

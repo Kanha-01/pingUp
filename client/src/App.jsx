@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useRef } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Login from "./pages/login";
 import Feed from "./pages/Feed";
 import Messages from "./pages/Messages";
@@ -10,17 +10,20 @@ import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import Layout from "./pages/Layout";
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "./features/user/userSlice.js";
 import { fetchConnections } from "./features/connections/connectionsSlice.js";
+import { addMessage } from "./features/messages/messagesSlice.js";
+import Notification from "./components/Notification.jsx";
 
 
 const App = () => {
   const { user } = useUser()
-  //for getting token for testing purpose
   const { getToken } = useAuth()
+  const {pathname} = useLocation()
+  const pathnameRef = useRef(pathname)
 
   const dispatch = useDispatch()
 
@@ -37,7 +40,32 @@ const App = () => {
   }, [user, getToken , dispatch])
 
 
-  //till here was for testing
+  useEffect(()=> {
+    pathnameRef.current = pathname
+  }, [pathname])
+
+  useEffect(()=> {
+    if(user){
+      const eventSource = new EventSource(import.meta.env.VITE_BASEURL + '/api/message/' + user.id)
+
+      eventSource.onmessage = (event) =>{
+        const message = JSON.parse(event.data)
+
+        //it means that this chat box is open
+        if(pathnameRef.current === ('/messages/' + message.from_user_id._id)){
+          dispatch(addMessage(message))
+        }
+        else{
+          toast.custom((t) => (
+            <Notification t={t} message={message} />
+          ), {position : 'bottom-right' })
+        }
+      }
+      return ()=> {
+        eventSource.close()
+      }
+    }
+  },[user , dispatch])
 
   return (
     <>
