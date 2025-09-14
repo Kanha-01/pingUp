@@ -52,7 +52,7 @@ const App = () => {
         const message = JSON.parse(event.data)
 
         //it means that this chat box is open
-        if(pathnameRef.current === ('/messages/' + message.from_user_id._id)){
+        if(pathnameRef.current === ('/messages/' + message.from_user_id?._id)){
           dispatch(addMessage(message))
         }
         else{

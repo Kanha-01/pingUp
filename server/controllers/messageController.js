@@ -6,24 +6,32 @@ import Message from "../models/Message.js";
 const connections = {};
 
 //controller function for the SSE endpoint
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://ping-up2-zeta.vercel.app"
+];
+
 export const sseController = (req, res) => {
   const { userId } = req.params;
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   console.log('New client connected :', userId);
 
   //set server-side event (SSE) headers
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
-  res.setHeader('Access-Control-Allow-Origin', 'https://ping-up2-zeta.vercel.app');
-
-  //deployment not working
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   //add the client's response object to the connections object
   connections[userId] = res;
 
   //send an initial event to the client
-  res.write('log : Connected to SSE stream\n\n');
+  //res.write('log : Connected to SSE stream\n\n');
+  res.write(`data: ${JSON.stringify({ log: "Connected to SSE stream" })}\n\n`);
 
   //handle client disconnects
   req.on('close', () => {
